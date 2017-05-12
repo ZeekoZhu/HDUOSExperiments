@@ -68,11 +68,6 @@
   <ItemGroup>
     <ClCompile Include="msgqueue.c" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Makefile">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </Text>
-  </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
       <LibraryDependencies>pthread;rt</LibraryDependencies>
