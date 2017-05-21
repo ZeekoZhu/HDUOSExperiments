@@ -32,5 +32,8 @@
     <ClCompile Include="..\FileSystem\Command.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\FileSystem\Category.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

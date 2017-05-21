@@ -61,6 +61,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="Category.c" />
     <ClCompile Include="Command.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>

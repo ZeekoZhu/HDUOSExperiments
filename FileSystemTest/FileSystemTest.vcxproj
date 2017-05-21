@@ -144,6 +144,7 @@
     <ClInclude Include="..\FileSystem\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\FileSystem\Category.c" />
     <ClCompile Include="..\FileSystem\Command.c" />
     <ClCompile Include="..\FileSystem\main.c" />
   </ItemGroup>

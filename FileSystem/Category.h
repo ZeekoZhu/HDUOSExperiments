@@ -7,6 +7,7 @@
 #define FILE_CNT_MAX 1216
 #define FAT_CNT_MAX 2048
 
+
 /**
 * FAT 记录大小 2B 最高位标识是否空白，其余标识磁盘块号
 * 存放在 0 号磁盘块
@@ -32,6 +33,7 @@ typedef struct
 	short Next;
 	char Data[DISK_BLOCK_SIZE - 4];
 } LogicRecord;
+
 
 /**
 * \brief 文件日期信息 16B
@@ -96,11 +98,15 @@ typedef struct
 	short Child;
 } Fcb;
 
-#define FCB_NULL 0
-#define FCB_NAN -1
-
-
-
+char GetReadMode(const Fcb* fcb);
+char GetWriteMode(const Fcb* fcb);
+void GetLastWriteStr(const Fcb* fcb, char* res, int len);
+void GetLastReadStr(const Fcb* fcb, char* res, int len);
+void FcbToString(const Fcb* fcb, char* res, int len);
+Fcb* CreateFile(const char* fileName, char mode, char type);
+Fcb* FindChild(Fcb* parent, const char* childName);
+Fcb* ParsePath(const char* absPath);
+char GetFileType(const Fcb* fcb);
 
 /**
 * \brief 普通文件
@@ -117,5 +123,20 @@ typedef struct
 #define FM_X 1
 #define FM_W 2
 #define FM_R 4
+
+
+#define FCB_NULL 0
+#define FCB_NAN -1
+
+
+Fcb* root;
+Fcb* cwd;
+Fcb FileCategory[FILE_CNT_MAX];
+short Fat[FAT_CNT_MAX];
+char Vhd[DISKSIZE];
+
+
+
+
 
 #endif // !FILESYS_STRUCT
