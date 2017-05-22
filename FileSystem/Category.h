@@ -53,15 +53,15 @@ typedef struct
 
 /**
 * \brief 文件控制块 64B
-*	36B		1B		1B		16B		4B		2B		2B		2B
-*	Name	Type	Mode	Time	Length	Address	Sibling	Child
+*	34B		1B		1B		16B		4B		2B		2B		2B		2B
+*	Name	Type	Mode	Time	Length	Address	Sibling	Child	Parent
 */
 typedef struct
 {
 	/**
 	* \brief 文件名
 	*/
-	char FileName[36];
+	char FileName[34];
 
 	/**
 	* \brief 文件标识号，直接采用数组下表确定
@@ -96,6 +96,10 @@ typedef struct
 	* \brief 第一个子节点
 	*/
 	short Child;
+	/**
+	 * \brief 所在目录
+	 */
+	short Parent;
 } Fcb;
 
 char GetReadMode(const Fcb* fcb);
@@ -107,6 +111,7 @@ Fcb* CreateFile(const char* fileName, char mode, char type);
 Fcb* FindChild(Fcb* parent, const char* childName);
 Fcb* ParsePath(const char* absPath);
 char GetFileType(const Fcb* fcb);
+void GetAbsolutePath(char* path, int len, const Fcb* fcb);
 
 /**
 * \brief 普通文件
@@ -134,9 +139,6 @@ Fcb* cwd;
 Fcb FileCategory[FILE_CNT_MAX];
 short Fat[FAT_CNT_MAX];
 char Vhd[DISKSIZE];
-
-
-
-
+char cwdPath[1000];
 
 #endif // !FILESYS_STRUCT

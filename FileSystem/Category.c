@@ -63,7 +63,7 @@ void GetLastReadStr(const Fcb* fcb, char* res, int len)
  * \brief 获取文件控制块的描述字符串
  * \param fcb 文件控制块
  * \param res 结果字符串
- * \param len 缓冲区长度，不应小于22
+ * \param len 缓冲区长度，不应小于84
  */
 void FcbToString(const Fcb* fcb, char* res, int len)
 {
@@ -130,12 +130,12 @@ Fcb* FindChild(Fcb* parent, const char* childName)
 	short it = parent->Child;
 	while (it != FCB_NULL)
 	{
-		result = &FileCategory[it];
-		if (strcmp(result->FileName, childName) == 0)
+		if (strcmp(FileCategory[it].FileName, childName) == 0)
 		{
+			result = &FileCategory[it];
 			break;
 		}
-		it = result->Sibling;
+		it = FileCategory[it].Sibling;
 	}
 	return result;
 }
@@ -147,24 +147,18 @@ Fcb* FindChild(Fcb* parent, const char* childName)
 */
 Fcb* ParsePath(const char* absPath)
 {
-	Fcb* result = &FileCategory[0];
-	int index = 1;
-	char fileName[36];
-	memset(fileName, 0, sizeof fileName);
-	for (int i = 1; i < strlen(absPath); i++)
+	Fcb* it = &FileCategory[0];
+	if (strcmp(absPath, "/") == 0)
 	{
-		if (absPath[i] == '/')
-		{
-			strcpy_s(fileName, i - index, absPath);
-			result = FindChild(result, fileName); // 任意一级无法找到子文件，就退出并返回 NULL
-			if (result == NULL)
-			{
-				break;
-			}
-			index = i + 1;
-		}
+		return it;
 	}
-	return result;
+	char * filename = strtok(absPath, "/");
+	while (filename != NULL && it != NULL)
+	{
+		it = FindChild(it, filename);
+		filename = strtok(NULL, "/");
+	}
+	return it;
 }
 
 /**
@@ -175,5 +169,16 @@ Fcb* ParsePath(const char* absPath)
 char GetFileType(const Fcb* fcb)
 {
 	return fcb->Type == FT_D ? 'D' : '-';
+}
+
+/**
+ * \brief 获取指定文件的绝对路径
+ * \param path 文件的绝对路径
+ * \param len 缓冲区长度
+ * \param fcb 文件控制块
+ */
+void GetAbsolutePath(char* path, int len, const Fcb* fcb)
+{
+	memset(path, 0, len);
 }
 
