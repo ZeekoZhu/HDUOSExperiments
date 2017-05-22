@@ -41,9 +41,8 @@ char GetWriteMode(const Fcb* fcb)
  */
 void GetLastWriteStr(const Fcb* fcb, char* res, int len)
 {
-	struct tm tm;
-	localtime_s(&tm, &fcb->TimeInfo.LastWrite);
-	strftime(res, len, "%Y/%m/%d %H:%M:%S", &tm);
+	struct tm* tm = localtime(&fcb->TimeInfo.LastWrite);
+	strftime(res, len, "%Y/%m/%d %H:%M:%S", tm);
 }
 
 /**
@@ -54,8 +53,7 @@ void GetLastWriteStr(const Fcb* fcb, char* res, int len)
 */
 void GetLastReadStr(const Fcb* fcb, char* res, int len)
 {
-	struct tm tm;
-	localtime_s(&tm, &fcb->TimeInfo.LastWrite);
+	struct tm* tm = localtime(&fcb->TimeInfo.LastWrite);
 	strftime(res, len, "%Y/%m/d - %H:%M:%S", &tm);
 }
 
@@ -70,7 +68,7 @@ void FcbToString(const Fcb* fcb, char* res, int len)
 	char lastRead[30], lastWrite[30];
 	GetLastWriteStr(fcb, lastRead, 30);
 	GetLastWriteStr(fcb, lastWrite, 30);
-	sprintf_s(res, len, "%c%c%c %-20s %-20s %10dB %-36s", GetFileType(fcb), GetReadMode(fcb), GetWriteMode(fcb), lastRead, lastWrite, fcb->Size, fcb->FileName);
+	sprintf(res, "%c%c%c %-20s %-20s %10dB %-36s", GetFileType(fcb), GetReadMode(fcb), GetWriteMode(fcb), lastRead, lastWrite, fcb->Size, fcb->FileName);
 }
 
 /**
@@ -88,7 +86,7 @@ Fcb* CreateFile(const char* fileName, char mode, char type)
 	if (index >= 0)
 	{
 		result = &FileCategory[index];
-		strcpy_s(result->FileName, 24, fileName);
+		strcpy(result->FileName, fileName);
 		result->Mode = mode;
 		result->Type = type;
 		result->Id = index;

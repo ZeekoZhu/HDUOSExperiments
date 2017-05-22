@@ -36,7 +36,7 @@ void MyExit()
 void MyMkdir()
 {
 	char dirName[36];
-	scanf_s("%s", dirName, 36);
+	scanf("%s", dirName);
 	if (strchr(dirName, '/') != NULL)
 	{
 		printf("File name can not contains '/'\n");
@@ -63,27 +63,27 @@ void MyMkdir()
 void MyCd()
 {
 	char input[1000];
-	scanf_s("%s", input, 1000);
+	scanf("%s", input);
 	char newCwd[1000];
 	if (input[0] != '/')
 	{
 		if (cwd != root)
 		{
-			sprintf_s(newCwd, 1000, "%s%c%s", cwdPath, '/', input);
+			sprintf(newCwd, "%s%c%s", cwdPath, '/', input);
 		}
 		else
 		{
-			sprintf_s(newCwd, 1000, "%s%s", cwdPath, input);
+			sprintf(newCwd, "%s%s", cwdPath, input);
 		}
 		printf(newCwd);
 		printf("%c", '\n');
 	}
 	else
 	{
-		strcpy_s(newCwd, 1000, input);
+		strcpy(newCwd, input);
 	}
 	char pathTmp[1000];
-	strcpy_s(pathTmp, 1000, newCwd);
+	strcpy(pathTmp, newCwd);
 	Fcb* next = ParsePath(pathTmp);
 	if (next == NULL)
 	{
@@ -91,20 +91,20 @@ void MyCd()
 		return;
 	}
 	cwd = next;
-	strcpy_s(cwdPath, 1000, newCwd);
+	strcpy(cwdPath, newCwd);
 }
 
 void MyRmDir()
 {
 	char dir[40];
-	scanf_s("%s", dir, 40);
+	scanf("%s", dir);
 	Fcb* fcb = FindChild(cwd, dir);
 	if (fcb == NULL)
 	{
 		printf("No such directory\n");
 		return;
 	}
-	if (fcb->Mode & FM_W != FM_W)
+	if ((fcb->Mode & FM_W) != FM_W)
 	{
 		printf("Permission denied\n");
 		return;

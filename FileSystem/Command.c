@@ -12,7 +12,7 @@ void Commander()
 	while (1)
 	{
 		printf("$ ");
-		scanf_s("%s", command, 50);
+		scanf("%s", command);
 		ARRAYFIRST(CommandEntry, Entries, CommandCnt, strcmp(_it->Command, command) == 0, index);
 		if (index == -1)
 		{
@@ -33,6 +33,6 @@ void Register(const char* commandName, void(*func)())
 	//printf("%d", strlen(commandName));
 	Entries[CommandCnt].Command = malloc(sizeof(char) * strlen(commandName) + 1);
 	Entries[CommandCnt].Func = func;
-	strcpy_s(Entries[CommandCnt].Command, strlen(commandName) + 1, commandName);
+	strcpy(Entries[CommandCnt].Command, commandName);
 	CommandCnt++;
 }
