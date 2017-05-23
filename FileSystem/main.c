@@ -107,6 +107,11 @@ void MyRmDir()
 		printf("No such directory\n");
 		return;
 	}
+	if (fcb->Type != FT_D)
+	{
+		printf("%s is not a directory\n", dir);
+		return;
+	}
 	if ((fcb->Mode & FM_W) != FM_W)
 	{
 		printf("Permission denied\n");
@@ -156,6 +161,11 @@ void MyRm()
 		printf("No such file\n");
 		return;
 	}
+	if (fcb->Type != FT_R)
+	{
+		printf("%s is not a regular file\n", filename);
+		return;
+	}
 	if ((fcb->Mode & FM_W) != FM_W)
 	{
 		printf("Permission denied\n");
@@ -188,25 +198,29 @@ void MyChmod()
 
 
 
-void CommandInit()
+void CommandInit(CommandContext* entries)
 {
-	Register("ls", &MyLS);
-	Register("exit", &MyExit);
-	Register("mkdir", &MyMkdir);
-	Register("cd", &MyCd);
-	Register("rmdir", &MyRmDir);
-	Register("cwd", &MyCwd);
-	Register("touch", &MyCreate);
-	Register("chmod", &MyChmod);
-	Register("rm", &MyRm);
+	Register(entries, "ls", &MyLS);
+	Register(entries, "exit", &MyExit);
+	Register(entries, "mkdir", &MyMkdir);
+	Register(entries, "cd", &MyCd);
+	Register(entries, "rmdir", &MyRmDir);
+	Register(entries, "cwd", &MyCwd);
+	Register(entries, "touch", &MyCreate);
+	Register(entries, "chmod", &MyChmod);
+	Register(entries, "rm", &MyRm);
 }
 
 int main()
 {
-	CommandInit();
+	CommandContext cmdContext;
+	cmdContext.CommandCnt = 0;
+	cmdContext.Entries = malloc(sizeof(CommandEntry) * 20);
+	CommandInit(&cmdContext);
 	Init();
 	cwd = root;
-	Commander();
+	Commander(&cmdContext);
 	printf("hello from FileSystem!\n");
+	free(cmdContext.Entries);
 	return 0;
 }

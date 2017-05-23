@@ -7,9 +7,13 @@ typedef struct
 	void(*Func)();
 } CommandEntry;
 
-int CommandCnt;
+typedef struct
+{
+	int CommandCnt;
+	CommandEntry* Entries;
+} CommandContext;
 
-CommandEntry Entries[20];
-void Commander();
-void Register(const char* commandName, void(*func)());
+
+void Commander(CommandContext* context);
+void Register(CommandContext* context, const char* commandName, void(*func)());
 #endif

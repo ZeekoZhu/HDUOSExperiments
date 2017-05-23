@@ -141,11 +141,13 @@
   <ItemGroup>
     <ClInclude Include="..\FileSystem\Category.h" />
     <ClInclude Include="..\FileSystem\Command.h" />
+    <ClInclude Include="..\FileSystem\Editor.h" />
     <ClInclude Include="..\FileSystem\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\FileSystem\Category.c" />
     <ClCompile Include="..\FileSystem\Command.c" />
+    <ClCompile Include="..\FileSystem\Editor.c" />
     <ClCompile Include="..\FileSystem\main.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

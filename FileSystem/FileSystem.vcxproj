@@ -63,11 +63,13 @@
   <ItemGroup>
     <ClCompile Include="Category.c" />
     <ClCompile Include="Command.c" />
+    <ClCompile Include="Editor.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Category.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="Editor.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
