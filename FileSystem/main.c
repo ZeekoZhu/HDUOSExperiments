@@ -2,9 +2,12 @@
 #include "Category.h"
 #include "Command.h"
 
-
-
-
+#define FILEEXIST(cwd, file) \
+if(FindChild(cwd, file) == NULL)\
+{\
+	printf("No such file or directory\n");\
+	return;\
+}
 
 void Init()
 {
@@ -124,6 +127,44 @@ void MyCwd()
 	printf("%s\n", cwdPath);
 }
 
+void MyCreate()
+{
+	char input[40];
+	scanf("%s", input);
+	if (strchr(input, '/') >= 0)
+	{
+		printf("Invalid filename\n");
+		return;
+	}
+	if (FindChild(cwd, input) != NULL)
+	{
+		printf("File is already exist\n");
+	}
+	Fcb* fcb = CreateFile(input, FM_R | FM_W, FT_R);
+	fcb->Sibling = cwd->Child;
+	cwd->Child = fcb->Id;
+	fcb->Parent = cwd->Id;
+}
+
+void MyChmod()
+{
+	int mode;
+	char input[40];
+	scanf("%d %s", &mode, input);
+	Fcb* fcb = FindChild(cwd, input);
+	if (fcb == NULL)
+	{
+		printf("No such file or directory\n");
+		return;
+	}
+	if (mode < 0 || mode > 7)
+	{
+		printf("Invalid mode\n");
+		return;
+	}
+	fcb->Mode = mode;
+}
+
 
 
 
@@ -135,6 +176,8 @@ void CommandInit()
 	Register("cd", &MyCd);
 	Register("rmdir", &MyRmDir);
 	Register("cwd", &MyCwd);
+	Register("touch", &MyCreate);
+	Register("chmod", &MyChmod);
 }
 
 int main()

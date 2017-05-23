@@ -5,6 +5,15 @@
 #include <stdio.h>
 #include <string.h>
 
+char GetMode(const Fcb* fcb, char mode, char present)
+{
+	if (fcb == NULL)
+	{
+		return '-';
+	}
+	return (fcb->Mode & mode) > 0 ? present : '-';
+}
+
 /**
  * \brief 查询文件的读权限
  * \param fcb 要查询的文件的控制块
@@ -12,11 +21,7 @@
  */
 char GetReadMode(const Fcb* fcb)
 {
-	if (fcb == NULL)
-	{
-		return '-';
-	}
-	return fcb->Mode == FM_R ? 'r' : '-';
+	return GetMode(fcb, FM_R, 'r');
 }
 
 /**
@@ -26,12 +31,19 @@ char GetReadMode(const Fcb* fcb)
  */
 char GetWriteMode(const Fcb* fcb)
 {
-	if (fcb == NULL)
-	{
-		return '-';
-	}
-	return fcb->Mode == FM_W ? 'w' : '-';
+	return GetMode(fcb, FM_W, 'w');
 }
+
+/**
+* \brief 查询文件的执行权限
+* \param fcb fcb 要查询的文件的控制块
+* \return 文件执行权限状态
+*/
+char GetExecMode(const Fcb* fcb)
+{
+	return GetMode(fcb, FM_X, 'x');
+}
+
 
 /**
  * \brief 获取文件的最后写入日期字符串
@@ -68,7 +80,7 @@ void FcbToString(const Fcb* fcb, char* res, int len)
 	char lastRead[30], lastWrite[30];
 	GetLastWriteStr(fcb, lastRead, 30);
 	GetLastWriteStr(fcb, lastWrite, 30);
-	sprintf(res, "%c%c%c %-20s %-20s %10dB %-36s", GetFileType(fcb), GetReadMode(fcb), GetWriteMode(fcb), lastRead, lastWrite, fcb->Size, fcb->FileName);
+	sprintf(res, "%c%c%c%c %-20s %-20s %10dB %-36s", GetFileType(fcb), GetReadMode(fcb), GetWriteMode(fcb), GetExecMode(fcb), lastRead, lastWrite, fcb->Size, fcb->FileName);
 }
 
 /**
