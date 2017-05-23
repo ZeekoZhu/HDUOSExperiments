@@ -178,7 +178,7 @@ Fcb* ParsePath(const char* absPath)
  */
 char GetFileType(const Fcb* fcb)
 {
-	return fcb->Type == FT_D ? 'D' : '-';
+	return fcb->Type == FT_D ? 'd' : '-';
 }
 
 /**

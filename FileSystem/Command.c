@@ -20,6 +20,9 @@ void Commander()
 			continue;
 		}
 		Entries[index].Func();
+		// Çå¿Õ»º³åÇø
+		int c;
+		while ((c = getchar()) != '\n' && c != EOF);
 	}
 }
 

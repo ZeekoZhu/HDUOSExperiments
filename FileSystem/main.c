@@ -131,7 +131,7 @@ void MyCreate()
 {
 	char input[40];
 	scanf("%s", input);
-	if (strchr(input, '/') >= 0)
+	if (strchr(input, '/') != NULL)
 	{
 		printf("Invalid filename\n");
 		return;
@@ -144,6 +144,26 @@ void MyCreate()
 	fcb->Sibling = cwd->Child;
 	cwd->Child = fcb->Id;
 	fcb->Parent = cwd->Id;
+}
+
+void MyRm()
+{
+	char filename[40];
+	scanf("%s", filename);
+	Fcb* fcb = FindChild(cwd, filename);
+	if (fcb == NULL)
+	{
+		printf("No such file\n");
+		return;
+	}
+	if ((fcb->Mode & FM_W) != FM_W)
+	{
+		printf("Permission denied\n");
+		return;
+	}
+	Fcb* parent = &FileCategory[fcb->Parent];
+	parent->Child = fcb->Sibling;
+	fcb->Id = -1;
 }
 
 void MyChmod()
@@ -178,6 +198,7 @@ void CommandInit()
 	Register("cwd", &MyCwd);
 	Register("touch", &MyCreate);
 	Register("chmod", &MyChmod);
+	Register("rm", &MyRm);
 }
 
 int main()
