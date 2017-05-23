@@ -6,12 +6,12 @@
 /**
  * \brief 现在开始你的命令行之旅~
  */
-void Commander(CommandContext* context)
+void Commander(CommandContext* context, char indecate)
 {
 	char command[50];
 	while (1)
 	{
-		printf("$ ");
+		printf("%c ", indecate);
 		scanf("%s", command);
 		ARRAYFIRST(CommandEntry, context->Entries, context->CommandCnt, strcmp(_it->Command, command) == 0, index);
 		if (index == -1)
@@ -19,7 +19,10 @@ void Commander(CommandContext* context)
 			printf("%s is not a command\n", command);
 			continue;
 		}
-		context->Entries[index].Func();
+		if (context->Entries[index].Func() == 1)
+		{
+			return;
+		}
 		// 清空缓冲区
 		int c;
 		while ((c = getchar()) != '\n' && c != EOF);
@@ -31,7 +34,7 @@ void Commander(CommandContext* context)
  * \param commandName 命令名称
  * \param func 要执行的函数
  */
-void Register(CommandContext* context, const char* commandName, void(*func)())
+void Register(CommandContext* context, const char* commandName, int(*func)())
 {
 	//printf("%d", strlen(commandName));
 	context->Entries[context->CommandCnt].Command = malloc(sizeof(char) * strlen(commandName) + 1);

@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include "Category.h"
 #include "Command.h"
+#include "Editor.h"
 
 #define FILEEXIST(cwd, file) \
 if(FindChild(cwd, file) == NULL)\
@@ -17,7 +18,7 @@ void Init()
 	root = CreateFile("/", FM_R, FT_D);
 }
 
-void MyLS()
+int MyLS()
 {
 	char str[100];
 	int it = cwd->Child;
@@ -28,15 +29,16 @@ void MyLS()
 		//memset(str, 0, sizeof str);
 		it = FileCategory[it].Sibling;
 	}
+	return 0;
 }
 
-void MyExit()
+int MyExit()
 {
 	printf("Exiting...\n");
 	exit(0);
 }
 
-void MyMkdir()
+int MyMkdir()
 {
 	char dirName[36];
 	scanf("%s", dirName);
@@ -61,9 +63,10 @@ void MyMkdir()
 	{
 		fcb->Parent = cwd->Id;
 	}
+	return 0;
 }
 
-void MyCd()
+int MyCd()
 {
 	char input[1000];
 	scanf("%s", input);
@@ -95,9 +98,10 @@ void MyCd()
 	}
 	cwd = next;
 	strcpy(cwdPath, newCwd);
+	return 0;
 }
 
-void MyRmDir()
+int MyRmDir()
 {
 	char dir[40];
 	scanf("%s", dir);
@@ -125,14 +129,16 @@ void MyRmDir()
 	Fcb* parent = &FileCategory[fcb->Parent];
 	parent->Child = fcb->Sibling;
 	fcb->Id = -1;
+	return 0;
 }
 
-void MyCwd()
+int MyCwd()
 {
 	printf("%s\n", cwdPath);
+	return 0;
 }
 
-void MyCreate()
+int MyCreate()
 {
 	char input[40];
 	scanf("%s", input);
@@ -149,9 +155,10 @@ void MyCreate()
 	fcb->Sibling = cwd->Child;
 	cwd->Child = fcb->Id;
 	fcb->Parent = cwd->Id;
+	return 0;
 }
 
-void MyRm()
+int MyRm()
 {
 	char filename[40];
 	scanf("%s", filename);
@@ -174,9 +181,10 @@ void MyRm()
 	Fcb* parent = &FileCategory[fcb->Parent];
 	parent->Child = fcb->Sibling;
 	fcb->Id = -1;
+	return 0;
 }
 
-void MyChmod()
+int MyChmod()
 {
 	int mode;
 	char input[40];
@@ -193,9 +201,15 @@ void MyChmod()
 		return;
 	}
 	fcb->Mode = mode;
+	return 0;
 }
 
 
+int OpenEditor()
+{
+	InitEditor();
+	return 0;
+}
 
 
 void CommandInit(CommandContext* entries)
@@ -209,6 +223,7 @@ void CommandInit(CommandContext* entries)
 	Register(entries, "touch", &MyCreate);
 	Register(entries, "chmod", &MyChmod);
 	Register(entries, "rm", &MyRm);
+	Register(entries, "vin", &OpenEditor);
 }
 
 int main()
@@ -219,7 +234,7 @@ int main()
 	CommandInit(&cmdContext);
 	Init();
 	cwd = root;
-	Commander(&cmdContext);
+	Commander(&cmdContext, '$');
 	printf("hello from FileSystem!\n");
 	free(cmdContext.Entries);
 	return 0;
