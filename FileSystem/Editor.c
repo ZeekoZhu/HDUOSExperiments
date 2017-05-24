@@ -6,33 +6,52 @@
 
 #ifdef __GNUC__
 #include <termios.h>
-int getkey() {
-	int character;
-	struct termios orig_term_attr;
-	struct termios new_term_attr;
+static struct termios old, new;
 
-	/* set the terminal to raw mode */
-	tcgetattr(fileno(stdin), &orig_term_attr);
-	memcpy(&new_term_attr, &orig_term_attr, sizeof(struct termios));
-	new_term_attr.c_lflag &= ~(ECHO | ICANON);
-	new_term_attr.c_cc[VTIME] = 0;
-	new_term_attr.c_cc[VMIN] = 0;
-	tcsetattr(fileno(stdin), TCSANOW, &new_term_attr);
-
-	/* read a character from the stdin stream without blocking */
-	/*   returns EOF (-1) if no character is available */
-	character = fgetc(stdin);
-
-	/* restore the original terminal attributes */
-	tcsetattr(fileno(stdin), TCSANOW, &orig_term_attr);
-
-	return character;
+/* Initialize new terminal i/o settings */
+void initTermios(int echo)
+{
+	tcgetattr(0, &old); /* grab old terminal i/o settings */
+	new = old; /* make new settings same as old settings */
+	new.c_lflag &= ~ICANON; /* disable buffered i/o */
+	new.c_lflag &= echo ? ECHO : ~ECHO; /* set echo mode */
+	tcsetattr(0, TCSANOW, &new); /* use these new terminal i/o settings now */
 }
-#define GETKEY getkey()
+
+/* Restore old terminal i/o settings */
+void resetTermios(void)
+{
+	tcsetattr(0, TCSANOW, &old);
+}
+
+/* Read 1 character - echo defines echo mode */
+char getch_(int echo)
+{
+	char ch;
+	ch = getchar();
+	return ch;
+}
+
+/* Read 1 character without echo */
+char getch(void)
+{
+	return getch_(0);
+}
+
+#define GETKEY getch()
 #endif
 #ifdef _MSC_VER
 #include <conio.h>
-#define GETKEY getche()
+char mygetch()
+{
+	char c = getch();
+	if (c == '\r')
+	{
+		c = '\n';
+	}
+	return c;
+}
+#define GETKEY mygetch()
 #endif
 
 
@@ -48,10 +67,31 @@ void Exec(CommandContext* context)
 		else
 		{
 			char tmp;
-			while ((tmp =GETKEY) != EOF)
+#ifdef __GNUC__
+			initTermios(0); // with echo
+#endif
+			while ((tmp = GETKEY) != EOF)
 			{
-				printf("-%d-\n", tmp);
+				if (tmp == 27) // ESC
+				{
+					break;
+				}
+				if (32 <= tmp && tmp <= 126 || tmp == '\n')
+				{
+					printf("%c", tmp);
+				}
+				if(tmp == 8)
+				{
+					putc(8, stdout);
+					putc(' ', stdout);
+					putc(8, stdout);
+				}
 			}
+#ifdef __GNUC__
+			resetTermios();
+#endif
+			printf("\n\n---------Now, You Are In Command Mode---------\n");
+			EditorMode = ED_C;
 		}
 	}
 }
@@ -62,6 +102,11 @@ int EditorQuit()
 	printf("Editor closing...\n");
 	return 1;
 }
+int Editing()
+{
+	EditorMode = ED_E;
+	return 0;
+}
 
 void InitEditor()
 {
@@ -71,6 +116,7 @@ void InitEditor()
 	context.Entries = malloc(sizeof(CommandEntry) * 5);
 	context.CommandCnt = 0;
 	Register(&context, "q", &EditorQuit);
+
 	Exec(&context);
 	free(context.Entries);
 }
