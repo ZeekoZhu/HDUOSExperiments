@@ -30,9 +30,11 @@
 */
 typedef struct
 {
-	short Next;
-	char Data[DISK_BLOCK_SIZE - 4];
+	short BlockIndex;
+	char* Data; //DISK_BLOCK_SIZE
 } LogicRecord;
+
+LogicRecord* GetEmptyDiskBlock();
 
 
 /**
@@ -112,6 +114,7 @@ Fcb* FindChild(Fcb* parent, const char* childName);
 Fcb* ParsePath(const char* absPath);
 char GetFileType(const Fcb* fcb);
 void GetAbsolutePath(char* path, int len, const Fcb* fcb);
+void WriteString(const Fcb* fcb, const char* content);
 
 /**
 * \brief ÆÕÍ¨ÎÄ¼þ

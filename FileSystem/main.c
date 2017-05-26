@@ -14,6 +14,8 @@ void Init()
 {
 	memset(Vhd, 0, sizeof Vhd);
 	memset(Fat, -1, sizeof Fat);
+	// 前 20 块被占用
+	memset(Fat, FAT_NULL, sizeof(short) * 20);
 	ARRAYINIT(Fcb, FileCategory, FILE_CNT_MAX, _it->Id = -1;);
 	root = CreateFile("/", FM_R, FT_D);
 }
@@ -204,10 +206,41 @@ int MyChmod()
 	return 0;
 }
 
+int MyOpen()
+{
+	char input[40];
+	scanf("%s", input);
+	Fcb* fcb = FindChild(cwd, input);
+	if (fcb == NULL)
+	{
+		printf("No such file\n");
+		return;
+	}
+	if (fcb->Type != FT_R)
+	{
+		printf("%s is not a regular file\n", input);
+		return;
+	}
+	if ((fcb->Mode & FM_W) != FM_W)
+	{
+		printf("Permission denied\n");
+		return;
+	}
+	Content = NULL;
+	InitEditor();
+	if (ED_WRITE == EditorStatus)
+	{
+		WriteString(fcb, Content);
+	}
+	return 0;
+}
+
 
 int OpenEditor()
 {
 	InitEditor();
+	printf("%s", Content);
+	printf("\n-------- EOF --------\n");
 	return 0;
 }
 
@@ -224,6 +257,7 @@ void CommandInit(CommandContext* entries)
 	Register(entries, "chmod", &MyChmod);
 	Register(entries, "rm", &MyRm);
 	Register(entries, "vin", &OpenEditor);
+	Register(entries, "open", &MyOpen);
 }
 
 int main()

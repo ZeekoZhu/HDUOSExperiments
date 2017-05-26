@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 char GetMode(const Fcb* fcb, char mode, char present)
 {
@@ -190,5 +191,48 @@ char GetFileType(const Fcb* fcb)
 void GetAbsolutePath(char* path, int len, const Fcb* fcb)
 {
 	memset(path, 0, len);
+}
+
+/**
+ * \brief 获取一个空的逻辑记录
+ * \return 一个空的逻辑记录
+ */
+LogicRecord* GetEmptyDiskBlock()
+{
+	LogicRecord* record = NULL;
+	ARRAYFIRST(short, Fat, FAT_CNT_MAX, *_it == FAT_AVALIABLE, index);
+	if (index == -1)
+	{
+		return NULL;
+	}
+	record = malloc(sizeof(LogicRecord));
+	record->Data = &Vhd[index * DISK_BLOCK_SIZE];
+	record->BlockIndex = index;
+	return record;
+}
+
+/**
+ * \brief 将文本内容写入文件
+ * \param fcb 文件控制块
+ * \param content 要写入的内容
+ */
+void WriteString(Fcb* fcb, const char* content)
+{
+	int len = strlen(content);
+	// 计算需要的磁盘块数
+	int blockCnt = ceil(len / DISK_BLOCK_SIZE);
+	LogicRecord* rec = GetEmptyDiskBlock();
+	TRYCATCH(rec->Data == NULL, "Disk space is not enough");
+
+	fcb->Address = rec->BlockIndex;
+	int it = fcb->Address;
+	for (int i = 0; i < blockCnt - 1; i++)
+	{
+		rec = GetEmptyDiskBlock();
+		TRYCATCH(rec->Data == NULL, "Disk space is not enough");
+		Fat[it] = rec->BlockIndex;
+		it = rec->BlockIndex;
+	}
+	Fat[it] = FAT_NULL;
 }
 

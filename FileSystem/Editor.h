@@ -14,8 +14,11 @@
 
 #define ED_CLOSE 0
 #define ED_OPEN 1
+#define ED_WRITE 2
 
 char* Content;
+static int EDContentSize;
+static int EDContentLen;
 int EditorMode;
 int EditorStatus;
 

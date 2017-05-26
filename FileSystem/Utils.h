@@ -12,7 +12,7 @@
  * \param array 数组
  * \param len 数组长度
  * \param predicate 筛选器，使用 _it 作为迭代器
- * \param res 结果索引，如果不存在这样的函数，将返回 -1
+ * \param res 结果索引，如果不存在这样的元素，将返回 -1
  */
 #define ARRAYFIRST(_type,array,len,predicate,res)\
 	int res = -1;\
