@@ -226,7 +226,20 @@ int MyOpen()
 		printf("Permission denied\n");
 		return;
 	}
-	Content = NULL;
+	printf("(O/o)verride or (A/a)ppend\n");
+	scanf("%s", input);
+	switch (input[0])
+	{
+	case 'O':
+	case 'o':
+		Content = NULL;
+		break;
+	case 'A':
+	case 'a':
+		break;
+	default:
+		printf("Invalid option\n");
+	}
 	InitEditor();
 	if (ED_WRITE == EditorStatus)
 	{

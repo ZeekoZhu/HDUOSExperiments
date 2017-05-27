@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <math.h>
 
 char GetMode(const Fcb* fcb, char mode, char present)
 {
@@ -109,9 +110,9 @@ Fcb* CreateFile(const char* fileName, char mode, char type)
 		// 空文件分配一个磁盘块
 		if (type == FT_R)
 		{
-			ARRAYFIRST(short, Fat, FAT_CNT_MAX, *_it == FAT_AVALIABLE, fatId);
+			/*ARRAYFIRST(short, Fat, FAT_CNT_MAX, *_it == FAT_AVALIABLE, fatId);
 			result->Address = fatId;
-			Fat[fatId] = FAT_NULL;
+			Fat[fatId] = FAT_NULL;*/
 			// 文件只能是叶子节点
 			result->Sibling = FCB_NULL;
 			result->Child = FCB_NAN;
@@ -220,19 +221,43 @@ void WriteString(Fcb* fcb, const char* content)
 {
 	int len = strlen(content);
 	// 计算需要的磁盘块数
-	int blockCnt = ceil(len / DISK_BLOCK_SIZE);
+	int size = min(len, DISK_BLOCK_SIZE) * sizeof(char);
+	int blockCnt = ceil(len / DISK_BLOCK_SIZE) + 1;
 	LogicRecord* rec = GetEmptyDiskBlock();
 	TRYCATCH(rec->Data == NULL, "Disk space is not enough");
-
+	memcpy(rec->Data, content, size);
 	fcb->Address = rec->BlockIndex;
 	int it = fcb->Address;
-	for (int i = 0; i < blockCnt - 1; i++)
+	for (int i = 1; i < blockCnt; i++)
 	{
+		size = min(len - i*DISK_BLOCK_SIZE, DISK_BLOCK_SIZE) * sizeof(char);
 		rec = GetEmptyDiskBlock();
 		TRYCATCH(rec->Data == NULL, "Disk space is not enough");
+
+		memcpy(rec->Data, content + it * DISK_BLOCK_SIZE, size);
 		Fat[it] = rec->BlockIndex;
 		it = rec->BlockIndex;
 	}
+	fcb->Size = len;
 	Fat[it] = FAT_NULL;
+}
+
+/**
+ * \brief 读取文件的内容到字符串
+ * \param fcb 文件控制块
+ * \return 文件中保存的内容
+ */
+char* ReadString(const Fcb* fcb)
+{
+	char* result = malloc(sizeof(char)*fcb->Size);
+	short it = fcb->Address;
+	int blockCnt = 0;
+	while (it != FAT_NULL)
+	{
+		int size = min(fcb->Size - blockCnt * DISK_BLOCK_SIZE, DISK_BLOCK_SIZE) * sizeof(char);
+		int index = Fat[it];
+		memcpy(result + blockCnt*DISK_BLOCK_SIZE, Vhd, size);
+	}
+	return result;
 }
 

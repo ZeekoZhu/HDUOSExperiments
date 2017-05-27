@@ -114,7 +114,8 @@ Fcb* FindChild(Fcb* parent, const char* childName);
 Fcb* ParsePath(const char* absPath);
 char GetFileType(const Fcb* fcb);
 void GetAbsolutePath(char* path, int len, const Fcb* fcb);
-void WriteString(const Fcb* fcb, const char* content);
+void WriteString(Fcb* fcb, const char* content);
+char* ReadString(const Fcb* fcb);
 
 /**
 * \brief ÆÕÍ¨ÎÄ¼þ
