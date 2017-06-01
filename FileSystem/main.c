@@ -2,7 +2,13 @@
 #include "Category.h"
 #include "Command.h"
 #include "Editor.h"
+#ifdef _MSC_VER
 #include <io.h>
+#endif
+#ifdef __GNUC__
+#include <unistd.h>
+#endif
+
 
 #define FILEEXIST(cwd, file) \
 if(FindChild(cwd, file) == NULL)\
@@ -32,7 +38,7 @@ void Init()
 {
 	memset(Vhd, 0, sizeof Vhd);
 	memset(Fat, FAT_AVALIABLE, sizeof Fat);
-	// ǰ 20 �鱻ռ��
+	// 前 20 块被占用
 	memset(Fat, FAT_NULL, sizeof(short) * 20);
 	ARRAYINIT(Fcb, FileCategory, FILE_CNT_MAX, _it->Id = -1;);
 	root = CreateFile("/", FM_R, FT_D);
@@ -289,8 +295,6 @@ void LoadVhd()
 	if (access("fs.vhd", 0) == -1)
 	{
 		Init();
-		fvhd = fopen("fs.vhd", "wb+");
-		fclose(fvhd);
 	}
 	else
 	{
@@ -305,7 +309,7 @@ void LoadVhd()
 
 void SaveVhd()
 {
-	fopen("fs.vhd", "wb+");
+	fvhd = fopen("fs.vhd", "wb+");
 	fwrite(Fat, sizeof(short), FAT_CNT_MAX, fvhd);
 	fwrite(FileCategory, sizeof(Fcb), FILE_CNT_MAX, fvhd);
 	fwrite(Vhd, sizeof(char), DISKSIZE, fvhd);
