@@ -4,11 +4,11 @@
 #include "Command.h"
 
 /**
- * \brief 编辑模式
+ * \brief 缂栬緫妯″紡
  */
 #define ED_E 0
 /**
- * \brief 命令模式
+ * \brief 鍛戒护妯″紡
  */
 #define ED_C 1
 

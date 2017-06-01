@@ -8,7 +8,7 @@ typedef struct
 } CommandEntry;
 
 /**
- * \brief ´æ´¢ÃüÁîĞĞÖ¸ÁîµÄÉÏÏÂÎÄ£¬Ê¹ÓÃÇ°ĞèÒªÊÖ¶¯³õÊ¼»¯
+ * \brief å­˜å‚¨å‘½ä»¤è¡ŒæŒ‡ä»¤çš„ä¸Šä¸‹æ–‡ï¼Œä½¿ç”¨å‰éœ€è¦æ‰‹åŠ¨åˆå§‹åŒ–
  */
 typedef struct
 {
@@ -19,10 +19,10 @@ typedef struct
 
 void Commander(CommandContext* context, char indecate);
 /**
- * \brief ÏòÖ¸¶¨µÄÖ¸ÁîÉÏÏÂÎÄÖĞ×¢²áÖ¸Áî
- * \param context ÃüÁîĞĞÖ¸ÁîÉÏÏÂÎÄ
- * \param commandName Ö¸ÁîÃû³Æ
- * \param func Ö¸ÁîÒªÖ´ĞĞµÄº¯Êı£¬·µ»Ø 0 ±íÊ¾¼ÌĞø¶ÁÈ¡Ö¸Áî£¬·µ»Ø 1 ±íÊ¾²»ÔÙ½ÓÊÜÖ¸Áî
+ * \brief å‘æŒ‡å®šçš„æŒ‡ä»¤ä¸Šä¸‹æ–‡ä¸­æ³¨å†ŒæŒ‡ä»¤
+ * \param context å‘½ä»¤è¡ŒæŒ‡ä»¤ä¸Šä¸‹æ–‡
+ * \param commandName æŒ‡ä»¤åç§°
+ * \param func æŒ‡ä»¤è¦æ‰§è¡Œçš„å‡½æ•°ï¼Œè¿”å› 0 è¡¨ç¤ºç»§ç»­è¯»å–æŒ‡ä»¤ï¼Œè¿”å› 1 è¡¨ç¤ºä¸å†æ¥å—æŒ‡ä»¤
  */
 void Register(CommandContext* context, const char* commandName, int(*func)());
 #endif

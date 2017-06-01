@@ -9,24 +9,24 @@
 
 
 /**
-* FAT ¼ÇÂ¼´óĞ¡ 2B ×î¸ßÎ»±êÊ¶ÊÇ·ñ¿Õ°×£¬ÆäÓà±êÊ¶´ÅÅÌ¿éºÅ
-* ´æ·ÅÔÚ 0 ºÅ´ÅÅÌ¿é
-* ¹² 2K ¸ö¼ÇÂ¼
-* ×î¶à±£´æ 8M ÎÄ¼ş
+* FAT è®°å½•å¤§å° 2B æœ€é«˜ä½æ ‡è¯†æ˜¯å¦ç©ºç™½ï¼Œå…¶ä½™æ ‡è¯†ç£ç›˜å—å·
+* å­˜æ”¾åœ¨ 0 å·ç£ç›˜å—
+* å…± 2K ä¸ªè®°å½•
+* æœ€å¤šä¿å­˜ 8M æ–‡ä»¶
 */
 
 #define FAT_AVALIABLE -1
 #define FAT_NULL -2
 
 /**
-* ÎÄ¼şÄ¿Â¼±í ¼ÇÂ¼´óĞ¡ 64B
-* ´æ·ÅÔÚ 1 ~ 19 ºÅ´ÅÅÌ¿é
-* ¹² 1216 ¸ö¼ÇÂ¼
-* ×î¶à±£´æ 1216 ¸öÎÄ¼ş
+* æ–‡ä»¶ç›®å½•è¡¨ è®°å½•å¤§å° 64B
+* å­˜æ”¾åœ¨ 1 ~ 19 å·ç£ç›˜å—
+* å…± 1216 ä¸ªè®°å½•
+* æœ€å¤šä¿å­˜ 1216 ä¸ªæ–‡ä»¶
 */
 
 /**
-* \brief Âß¼­¼ÇÂ¼ 4K
+* \brief é€»è¾‘è®°å½• 4K
 */
 typedef struct
 {
@@ -38,68 +38,68 @@ LogicRecord* GetEmptyDiskBlock();
 
 
 /**
-* \brief ÎÄ¼şÈÕÆÚĞÅÏ¢ 16B
+* \brief æ–‡ä»¶æ—¥æœŸä¿¡æ¯ 16B
 */
 typedef struct
 {
 	/**
-	* \brief ×îºó¶ÁÈ¡Ê±¼ä
+	* \brief æœ€åè¯»å–æ—¶é—´
 	*/
 	long long LastRead;
 	/**
-	* \brief ×îºóĞ´ÈëÊ±¼ä
+	* \brief æœ€åå†™å…¥æ—¶é—´
 	*/
 	long long LastWrite;
 } TimeInfo;
 
 
 /**
-* \brief ÎÄ¼ş¿ØÖÆ¿é 64B
+* \brief æ–‡ä»¶æ§åˆ¶å— 64B
 *	34B		1B		1B		16B		4B		2B		2B		2B		2B
 *	Name	Type	Mode	Time	Length	Address	Sibling	Child	Parent
 */
 typedef struct
 {
 	/**
-	* \brief ÎÄ¼şÃû
+	* \brief æ–‡ä»¶å
 	*/
 	char FileName[34];
 
 	/**
-	* \brief ÎÄ¼ş±êÊ¶ºÅ£¬Ö±½Ó²ÉÓÃÊı×éÏÂ±íÈ·¶¨
+	* \brief æ–‡ä»¶æ ‡è¯†å·ï¼Œç›´æ¥é‡‡ç”¨æ•°ç»„ä¸‹è¡¨ç¡®å®š
 	*/
 	int Id;
 
 	/**
-	* \brief ÎÄ¼şÀàĞÍ
+	* \brief æ–‡ä»¶ç±»å‹
 	*/
 	char Type;
 	/**
-	* \brief ÎÄ¼şĞí¿ÉÈ¨
+	* \brief æ–‡ä»¶è®¸å¯æƒ
 	*/
 	char Mode;
 	/**
-	* \brief ÎÄ¼ş´æÈ¡Ê±¼ä
+	* \brief æ–‡ä»¶å­˜å–æ—¶é—´
 	*/
 	TimeInfo TimeInfo;
 	/**
-	* \brief ÎÄ¼ş³¤¶È
+	* \brief æ–‡ä»¶é•¿åº¦
 	*/
 	int Size;
 	/**
-	* \brief ÎÄ¼şÆğÊ¼´ÅÅÌºÅ
+	* \brief æ–‡ä»¶èµ·å§‹ç£ç›˜å·
 	*/
 	short Address;
 	/**
-	* \brief ÏÂÒ»¸öĞÖµÜ½Úµã¼ÇÂ¼ºÅ
+	* \brief ä¸‹ä¸€ä¸ªå…„å¼ŸèŠ‚ç‚¹è®°å½•å·
 	*/
 	short Sibling;
 	/**
-	* \brief µÚÒ»¸ö×Ó½Úµã
+	* \brief ç¬¬ä¸€ä¸ªå­èŠ‚ç‚¹
 	*/
 	short Child;
 	/**
-	 * \brief ËùÔÚÄ¿Â¼
+	 * \brief æ‰€åœ¨ç›®å½•
 	 */
 	short Parent;
 } Fcb;
@@ -119,11 +119,11 @@ char* ReadString(const Fcb* fcb);
 void DeleteFile(Fcb* fcb);
 
 /**
-* \brief ÆÕÍ¨ÎÄ¼ş
+* \brief æ™®é€šæ–‡ä»¶
 */
 #define FT_R 0
 /**
-* \brief Ä¿Â¼ÎÄ¼ş
+* \brief ç›®å½•æ–‡ä»¶
 */
 #define FT_D 1
 

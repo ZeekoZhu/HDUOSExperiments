@@ -7,12 +7,12 @@
 #include <string.h>
 #define TRYCATCH(pred,msg) if(pred) {fprintf(stderr, "ERROR: %s -- %s\n", strerror(errno), msg); exit(1);}
 /**
- * \brief ÕÒ³öÊı×éÖĞµÚÒ»¸ö·ûºÏÌõ¼şµÄÔªËØµÄÏÂ±ê
- * \param type Êı×éÔªËØÀàĞÍ
- * \param array Êı×é
- * \param len Êı×é³¤¶È
- * \param predicate É¸Ñ¡Æ÷£¬Ê¹ÓÃ _it ×÷Îªµü´úÆ÷
- * \param res ½á¹ûË÷Òı£¬Èç¹û²»´æÔÚÕâÑùµÄÔªËØ£¬½«·µ»Ø -1
+ * \brief æ‰¾å‡ºæ•°ç»„ä¸­ç¬¬ä¸€ä¸ªç¬¦åˆæ¡ä»¶çš„å…ƒç´ çš„ä¸‹æ ‡
+ * \param type æ•°ç»„å…ƒç´ ç±»å‹
+ * \param array æ•°ç»„
+ * \param len æ•°ç»„é•¿åº¦
+ * \param predicate ç­›é€‰å™¨ï¼Œä½¿ç”¨ _it ä½œä¸ºè¿­ä»£å™¨
+ * \param res ç»“æœç´¢å¼•ï¼Œå¦‚æœä¸å­˜åœ¨è¿™æ ·çš„å…ƒç´ ï¼Œå°†è¿”å› -1
  */
 #define ARRAYFIRST(_type,array,len,predicate,res)\
 	int res = -1;\
@@ -26,11 +26,11 @@
 		}\
 	}
 /**
- * \brief Ê¹ÓÃÖ¸¶¨¶¯×÷³õÊ¼»¯Êı×éÖĞµÄÃ¿¸öÔªËØ
- * \param type Êı×éÔªËØÀàĞÍ
- * \param array Êı×é
- * \param len Êı×é³¤¶È
- * \param action ¶ÔÃ¿¸öÔªËØÖ´ĞĞµÄ²Ù×÷£¬_it ×÷Îªµü´úÆ÷
+ * \brief ä½¿ç”¨æŒ‡å®šåŠ¨ä½œåˆå§‹åŒ–æ•°ç»„ä¸­çš„æ¯ä¸ªå…ƒç´ 
+ * \param type æ•°ç»„å…ƒç´ ç±»å‹
+ * \param array æ•°ç»„
+ * \param len æ•°ç»„é•¿åº¦
+ * \param action å¯¹æ¯ä¸ªå…ƒç´ æ‰§è¡Œçš„æ“ä½œï¼Œ_it ä½œä¸ºè¿­ä»£å™¨
  */
 #define ARRAYINIT(type,array,len,action)\
 	for(int _TMP_I = 0; _TMP_I < len; _TMP_I++)\

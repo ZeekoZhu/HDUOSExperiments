@@ -82,7 +82,7 @@ void Exec(CommandContext* context)
 				}
 				if (32 <= tmp && tmp <= 126 || tmp == '\n')
 				{
-					// »º³åÇø²»¹»¾ÍÀ©³äÒ»±¶
+					// ç¼“å†²åŒºä¸å¤Ÿå°±æ‰©å……ä¸€å€
 					if (EDContentLen + 1 >= EDContentSize)
 					{
 						EDContentSize *= 2;
@@ -100,9 +100,9 @@ void Exec(CommandContext* context)
 				{
 					EDContentLen--;
 					Content[EDContentLen] = 0;
-					putc(8, stdout); //ÍË¸ñ
-					putc(' ', stdout); //¿Õ¸ñ
-					putc(8, stdout); //¿Õ¸ñ
+					putc(8, stdout); //é€€æ ¼
+					putc(' ', stdout); //ç©ºæ ¼
+					putc(8, stdout); //ç©ºæ ¼
 				}
 			}
 #ifdef __GNUC__
@@ -135,9 +135,9 @@ int EditorWriteSig()
 }
 
 /**
- * \brief º¯ÊıÍË³öºó£¬¿ÉÒÔ´Ó Content ÖĞ¶ÁÈ¡ÓÃ»§µÄÊäÈë¡£
- * Èç¹ûĞèÒª±à¼­¿Õ°×ÎÄ¼ş£¬Content ĞèÒªÉèÖÃÎª NULL¡£
- * Èç¹ûĞèÒª×·¼Ó±à¼­£¬Content£¬EDContentSize£¬EDContentLen ĞèÒªÊÖ¶¯ÉèÖÃ
+ * \brief å‡½æ•°é€€å‡ºåï¼Œå¯ä»¥ä» Content ä¸­è¯»å–ç”¨æˆ·çš„è¾“å…¥ã€‚
+ * å¦‚æœéœ€è¦ç¼–è¾‘ç©ºç™½æ–‡ä»¶ï¼ŒContent éœ€è¦è®¾ç½®ä¸º NULLã€‚
+ * å¦‚æœéœ€è¦è¿½åŠ ç¼–è¾‘ï¼ŒContentï¼ŒEDContentSizeï¼ŒEDContentLen éœ€è¦æ‰‹åŠ¨è®¾ç½®
  */
 void InitEditor()
 {

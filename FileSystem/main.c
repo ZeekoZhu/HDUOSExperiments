@@ -55,7 +55,7 @@ int MyLS()
 int MyExit()
 {
 	printf("Exiting...\n");
-	exit(0);
+	return 1;
 }
 
 int MyMkdir()
@@ -295,9 +295,9 @@ void LoadVhd()
 	else
 	{
 		fvhd = fopen("fs.vhd", "rb");
-		fread(Fat, sizeof(short), FAT_CNT_MAX, fvhd);
-		fread(FileCategory, sizeof(Fcb), FILE_CNT_MAX, fvhd);
-		fread(Vhd, sizeof(char), DISKSIZE, fvhd);
+		int a = fread(Fat, sizeof(short), FAT_CNT_MAX, fvhd);
+		int b = fread(FileCategory, sizeof(Fcb), FILE_CNT_MAX, fvhd);
+		int c = fread(Vhd, sizeof(char), DISKSIZE, fvhd);
 		root = FileCategory;
 		fclose(fvhd);
 	}
@@ -321,7 +321,6 @@ int main()
 	LoadVhd();
 	cwd = root;
 	Commander(&cmdContext, '$');
-	printf("hello from FileSystem!\n");
 	free(cmdContext.Entries);
 	SaveVhd();
 	return 0;

@@ -4,7 +4,7 @@
 #include <string.h>
 
 /**
- * \brief ÏÖÔÚ¿ªÊ¼ÄãµÄÃüÁîĞĞÖ®ÂÃ~
+ * \brief ç°åœ¨å¼€å§‹ä½ çš„å‘½ä»¤è¡Œä¹‹æ—…~
  */
 void Commander(CommandContext* context, char indecate)
 {
@@ -23,16 +23,16 @@ void Commander(CommandContext* context, char indecate)
 		{
 			return;
 		}
-		// Çå¿Õ»º³åÇø
+		// æ¸…ç©ºç¼“å†²åŒº
 		int c;
 		while ((c = getchar()) != '\n' && c != EOF);
 	}
 }
 
 /**
- * \brief ×¢²áÒ»ÌõÃüÁî
- * \param commandName ÃüÁîÃû³Æ
- * \param func ÒªÖ´ĞĞµÄº¯Êı
+ * \brief æ³¨å†Œä¸€æ¡å‘½ä»¤
+ * \param commandName å‘½ä»¤åç§°
+ * \param func è¦æ‰§è¡Œçš„å‡½æ•°
  */
 void Register(CommandContext* context, const char* commandName, int(*func)())
 {

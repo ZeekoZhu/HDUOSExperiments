@@ -16,9 +16,9 @@ char GetMode(const Fcb* fcb, char mode, char present)
 }
 
 /**
- * \brief ²éÑ¯ÎÄ¼þµÄ¶ÁÈ¨ÏÞ
- * \param fcb Òª²éÑ¯µÄÎÄ¼þµÄ¿ØÖÆ¿é
- * \return ÎÄ¼þ¶ÁÈ¨ÏÞ×´Ì¬
+ * \brief æŸ¥è¯¢æ–‡ä»¶çš„è¯»æƒé™
+ * \param fcb è¦æŸ¥è¯¢çš„æ–‡ä»¶çš„æŽ§åˆ¶å—
+ * \return æ–‡ä»¶è¯»æƒé™çŠ¶æ€
  */
 char GetReadMode(const Fcb* fcb)
 {
@@ -26,9 +26,9 @@ char GetReadMode(const Fcb* fcb)
 }
 
 /**
- * \brief ²éÑ¯ÎÄ¼þµÄÐ´È¨ÏÞ
- * \param fcb fcb Òª²éÑ¯µÄÎÄ¼þµÄ¿ØÖÆ¿é
- * \return ÎÄ¼þÐ´È¨ÏÞ×´Ì¬
+ * \brief æŸ¥è¯¢æ–‡ä»¶çš„å†™æƒé™
+ * \param fcb fcb è¦æŸ¥è¯¢çš„æ–‡ä»¶çš„æŽ§åˆ¶å—
+ * \return æ–‡ä»¶å†™æƒé™çŠ¶æ€
  */
 char GetWriteMode(const Fcb* fcb)
 {
@@ -36,9 +36,9 @@ char GetWriteMode(const Fcb* fcb)
 }
 
 /**
-* \brief ²éÑ¯ÎÄ¼þµÄÖ´ÐÐÈ¨ÏÞ
-* \param fcb fcb Òª²éÑ¯µÄÎÄ¼þµÄ¿ØÖÆ¿é
-* \return ÎÄ¼þÖ´ÐÐÈ¨ÏÞ×´Ì¬
+* \brief æŸ¥è¯¢æ–‡ä»¶çš„æ‰§è¡Œæƒé™
+* \param fcb fcb è¦æŸ¥è¯¢çš„æ–‡ä»¶çš„æŽ§åˆ¶å—
+* \return æ–‡ä»¶æ‰§è¡Œæƒé™çŠ¶æ€
 */
 char GetExecMode(const Fcb* fcb)
 {
@@ -47,10 +47,10 @@ char GetExecMode(const Fcb* fcb)
 
 
 /**
- * \brief »ñÈ¡ÎÄ¼þµÄ×îºóÐ´ÈëÈÕÆÚ×Ö·û´®
- * \param fcb Òª²éÑ¯µÄÎÄ¼þ¿ØÖÆ¿é
- * \param res ÎÄ¼þ×îºóÐ´ÈëÈÕÆÚ×Ö·û´®
- * \param len »º³åÇø³¤¶È£¬²»Ó¦µÍÓÚ20
+ * \brief èŽ·å–æ–‡ä»¶çš„æœ€åŽå†™å…¥æ—¥æœŸå­—ç¬¦ä¸²
+ * \param fcb è¦æŸ¥è¯¢çš„æ–‡ä»¶æŽ§åˆ¶å—
+ * \param res æ–‡ä»¶æœ€åŽå†™å…¥æ—¥æœŸå­—ç¬¦ä¸²
+ * \param len ç¼“å†²åŒºé•¿åº¦ï¼Œä¸åº”ä½ŽäºŽ20
  */
 void GetLastWriteStr(const Fcb* fcb, char* res, int len)
 {
@@ -59,10 +59,10 @@ void GetLastWriteStr(const Fcb* fcb, char* res, int len)
 }
 
 /**
-* \brief »ñÈ¡ÎÄ¼þµÄ×îºó¶ÁÈ¡ÈÕÆÚ×Ö·û´®
-* \param fcb Òª²éÑ¯µÄÎÄ¼þ¿ØÖÆ¿é
-* \param res ÎÄ¼þ×îºó¶ÁÈ¡ÈÕÆÚ×Ö·û´®
-* \param len »º³åÇø³¤¶È£¬²»Ó¦µÍÓÚ22
+* \brief èŽ·å–æ–‡ä»¶çš„æœ€åŽè¯»å–æ—¥æœŸå­—ç¬¦ä¸²
+* \param fcb è¦æŸ¥è¯¢çš„æ–‡ä»¶æŽ§åˆ¶å—
+* \param res æ–‡ä»¶æœ€åŽè¯»å–æ—¥æœŸå­—ç¬¦ä¸²
+* \param len ç¼“å†²åŒºé•¿åº¦ï¼Œä¸åº”ä½ŽäºŽ22
 */
 void GetLastReadStr(const Fcb* fcb, char* res, int len)
 {
@@ -71,10 +71,10 @@ void GetLastReadStr(const Fcb* fcb, char* res, int len)
 }
 
 /**
- * \brief »ñÈ¡ÎÄ¼þ¿ØÖÆ¿éµÄÃèÊö×Ö·û´®
- * \param fcb ÎÄ¼þ¿ØÖÆ¿é
- * \param res ½á¹û×Ö·û´®
- * \param len »º³åÇø³¤¶È£¬²»Ó¦Ð¡ÓÚ84
+ * \brief èŽ·å–æ–‡ä»¶æŽ§åˆ¶å—çš„æè¿°å­—ç¬¦ä¸²
+ * \param fcb æ–‡ä»¶æŽ§åˆ¶å—
+ * \param res ç»“æžœå­—ç¬¦ä¸²
+ * \param len ç¼“å†²åŒºé•¿åº¦ï¼Œä¸åº”å°äºŽ84
  */
 void FcbToString(const Fcb* fcb, char* res, int len)
 {
@@ -85,16 +85,16 @@ void FcbToString(const Fcb* fcb, char* res, int len)
 }
 
 /**
-* \brief ´Ó Fcb Êý×éÖÐ´´½¨ÐÂµÄÎÄ¼þ£¬²»ÐèÒªÊÖ¶¯ÊÍ·Å×ÊÔ´
-* \param fileName ÎÄ¼þÃû
-* \param mode ¶ÁÐ´È¨ÏÞ
-* \param type ÎÄ¼þÀàÐÍ
-* \return ÎÄ¼þ¿ØÖÆ¿é£¬´´½¨Ê§°Ü
+* \brief ä»Ž Fcb æ•°ç»„ä¸­åˆ›å»ºæ–°çš„æ–‡ä»¶ï¼Œä¸éœ€è¦æ‰‹åŠ¨é‡Šæ”¾èµ„æº
+* \param fileName æ–‡ä»¶å
+* \param mode è¯»å†™æƒé™
+* \param type æ–‡ä»¶ç±»åž‹
+* \return æ–‡ä»¶æŽ§åˆ¶å—ï¼Œåˆ›å»ºå¤±è´¥
 */
 Fcb* CreateFile(const char* fileName, char mode, char type)
 {
 	Fcb* result = NULL;
-	// ÕÒÒ»¸ö¿Õ¼ÇÂ¼³öÀ´
+	// æ‰¾ä¸€ä¸ªç©ºè®°å½•å‡ºæ¥
 	ARRAYFIRST(Fcb, FileCategory, FILE_CNT_MAX, _it->Id < 0, index);
 	if (index >= 0)
 	{
@@ -108,7 +108,7 @@ Fcb* CreateFile(const char* fileName, char mode, char type)
 		result->TimeInfo.LastRead = -1;
 		if (type == FT_R)
 		{
-			// ÎÄ¼þÖ»ÄÜÊÇÒ¶×Ó½Úµã
+			// æ–‡ä»¶åªèƒ½æ˜¯å¶å­èŠ‚ç‚¹
 			result->Sibling = FCB_NULL;
 			result->Child = FCB_NAN;
 		}
@@ -122,10 +122,10 @@ Fcb* CreateFile(const char* fileName, char mode, char type)
 }
 
 /**
-* \brief ÔÚÖ¸¶¨Ä¿Â¼ÏÂÑ°ÕÒÖ±½Ó×ÓÎÄ¼þ
-* \param parent ÒªÑ°ÕÒµÄÄ¿Â¼
-* \param childName ÎÄ¼þÃû
-* \return Ä¿±ê×ÓÎÄ¼þµÄ¿ØÖÆ¿é
+* \brief åœ¨æŒ‡å®šç›®å½•ä¸‹å¯»æ‰¾ç›´æŽ¥å­æ–‡ä»¶
+* \param parent è¦å¯»æ‰¾çš„ç›®å½•
+* \param childName æ–‡ä»¶å
+* \return ç›®æ ‡å­æ–‡ä»¶çš„æŽ§åˆ¶å—
 */
 Fcb* FindChild(Fcb* parent, const char* childName)
 {
@@ -148,9 +148,9 @@ Fcb* FindChild(Fcb* parent, const char* childName)
 }
 
 /**
-* \brief ½«Ö¸¶¨µÄ¾ø¶ÔÂ·¾¶×ª»»ÎªÎÄ¼þ¿ØÖÆ¿é
-* \param absPath ÎÄ¼þµÄ¾ø¶ÔÂ·¾¶
-* \return ¾ø¶ÔÂ·¾¶Ö¸ÏòµÄÎÄ¼þµÄ¿ØÖÆ¿é
+* \brief å°†æŒ‡å®šçš„ç»å¯¹è·¯å¾„è½¬æ¢ä¸ºæ–‡ä»¶æŽ§åˆ¶å—
+* \param absPath æ–‡ä»¶çš„ç»å¯¹è·¯å¾„
+* \return ç»å¯¹è·¯å¾„æŒ‡å‘çš„æ–‡ä»¶çš„æŽ§åˆ¶å—
 */
 Fcb* ParsePath(const char* absPath)
 {
@@ -169,9 +169,9 @@ Fcb* ParsePath(const char* absPath)
 }
 
 /**
- * \brief »ñÈ¡Ö¸¶¨ÎÄ¼þÓÃ×Ö·û±êÊ¶µÄÀàÐÍ
- * \param fcb ÎÄ¼þ¿ØÖÆ¿é
- * \return ±íÊ¾ÎÄ¼þÀàÐÍµÄ×Ö·û
+ * \brief èŽ·å–æŒ‡å®šæ–‡ä»¶ç”¨å­—ç¬¦æ ‡è¯†çš„ç±»åž‹
+ * \param fcb æ–‡ä»¶æŽ§åˆ¶å—
+ * \return è¡¨ç¤ºæ–‡ä»¶ç±»åž‹çš„å­—ç¬¦
  */
 char GetFileType(const Fcb* fcb)
 {
@@ -179,10 +179,10 @@ char GetFileType(const Fcb* fcb)
 }
 
 /**
- * \brief »ñÈ¡Ö¸¶¨ÎÄ¼þµÄ¾ø¶ÔÂ·¾¶
- * \param path ÎÄ¼þµÄ¾ø¶ÔÂ·¾¶
- * \param len »º³åÇø³¤¶È
- * \param fcb ÎÄ¼þ¿ØÖÆ¿é
+ * \brief èŽ·å–æŒ‡å®šæ–‡ä»¶çš„ç»å¯¹è·¯å¾„
+ * \param path æ–‡ä»¶çš„ç»å¯¹è·¯å¾„
+ * \param len ç¼“å†²åŒºé•¿åº¦
+ * \param fcb æ–‡ä»¶æŽ§åˆ¶å—
  */
 void GetAbsolutePath(char* path, int len, const Fcb* fcb)
 {
@@ -190,8 +190,8 @@ void GetAbsolutePath(char* path, int len, const Fcb* fcb)
 }
 
 /**
- * \brief »ñÈ¡Ò»¸ö¿ÕµÄÂß¼­¼ÇÂ¼
- * \return Ò»¸ö¿ÕµÄÂß¼­¼ÇÂ¼
+ * \brief èŽ·å–ä¸€ä¸ªç©ºçš„é€»è¾‘è®°å½•
+ * \return ä¸€ä¸ªç©ºçš„é€»è¾‘è®°å½•
  */
 LogicRecord* GetEmptyDiskBlock()
 {
@@ -208,14 +208,14 @@ LogicRecord* GetEmptyDiskBlock()
 }
 
 /**
- * \brief ½«ÎÄ±¾ÄÚÈÝÐ´ÈëÎÄ¼þ
- * \param fcb ÎÄ¼þ¿ØÖÆ¿é
- * \param content ÒªÐ´ÈëµÄÄÚÈÝ
+ * \brief å°†æ–‡æœ¬å†…å®¹å†™å…¥æ–‡ä»¶
+ * \param fcb æ–‡ä»¶æŽ§åˆ¶å—
+ * \param content è¦å†™å…¥çš„å†…å®¹
  */
 void WriteString(Fcb* fcb, const char* content)
 {
 	int len = strlen(content);
-	// ¼ÆËãÐèÒªµÄ´ÅÅÌ¿éÊý
+	// è®¡ç®—éœ€è¦çš„ç£ç›˜å—æ•°
 	int size = min(len, DISK_BLOCK_SIZE) * sizeof(char);
 	int blockCnt = ceil(len / DISK_BLOCK_SIZE) + 1;
 	LogicRecord* rec = GetEmptyDiskBlock();
@@ -238,9 +238,9 @@ void WriteString(Fcb* fcb, const char* content)
 }
 
 /**
- * \brief ¶ÁÈ¡ÎÄ¼þµÄÄÚÈÝµ½×Ö·û´®
- * \param fcb ÎÄ¼þ¿ØÖÆ¿é
- * \return ÎÄ¼þÖÐ±£´æµÄÄÚÈÝ
+ * \brief è¯»å–æ–‡ä»¶çš„å†…å®¹åˆ°å­—ç¬¦ä¸²
+ * \param fcb æ–‡ä»¶æŽ§åˆ¶å—
+ * \return æ–‡ä»¶ä¸­ä¿å­˜çš„å†…å®¹
  */
 char* ReadString(const Fcb* fcb)
 {
@@ -259,14 +259,14 @@ char* ReadString(const Fcb* fcb)
 }
 
 /**
- * \brief É¾³ýÖ¸¶¨ÎÄ¼þ
- * \param fcb ÎÄ¼þ¿ØÖÆ¿é
+ * \brief åˆ é™¤æŒ‡å®šæ–‡ä»¶
+ * \param fcb æ–‡ä»¶æŽ§åˆ¶å—
  */
 void DeleteFile(Fcb* fcb)
 {
 	Fcb* parent = FileCategory + fcb->Parent;
 	int it = fcb->Address;
-	// Çå³ý´ÅÅÌ¿éÉÏµÄÄÚÈÝ
+	// æ¸…é™¤ç£ç›˜å—ä¸Šçš„å†…å®¹
 	while (fcb->Size > 0 && it != FAT_NULL)
 	{
 		memset(Vhd + it * DISK_BLOCK_SIZE, 0, DISK_BLOCK_SIZE);
@@ -274,7 +274,7 @@ void DeleteFile(Fcb* fcb)
 		Fat[it] = FAT_AVALIABLE;
 		it = tmp;
 	}
-	// Çå³ýÎÄ¼þÄ¿Â¼¼ÇÂ¼Ïî
+	// æ¸…é™¤æ–‡ä»¶ç›®å½•è®°å½•é¡¹
 	it = parent->Child;
 	if (it == fcb->Id)
 	{
