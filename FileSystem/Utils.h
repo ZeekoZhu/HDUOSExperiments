@@ -39,3 +39,7 @@
 		action\
 	}
 #endif
+
+#ifdef __GNUC__
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif

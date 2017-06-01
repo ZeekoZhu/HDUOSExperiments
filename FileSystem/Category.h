@@ -116,6 +116,7 @@ char GetFileType(const Fcb* fcb);
 void GetAbsolutePath(char* path, int len, const Fcb* fcb);
 void WriteString(Fcb* fcb, const char* content);
 char* ReadString(const Fcb* fcb);
+void DeleteFile(Fcb* fcb);
 
 /**
 * \brief ÆÕÍ¨ÎÄ¼þ

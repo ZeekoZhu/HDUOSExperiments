@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include <math.h>
 
 char GetMode(const Fcb* fcb, char mode, char present)
 {
@@ -68,7 +67,7 @@ void GetLastWriteStr(const Fcb* fcb, char* res, int len)
 void GetLastReadStr(const Fcb* fcb, char* res, int len)
 {
 	struct tm* tm = localtime(&fcb->TimeInfo.LastWrite);
-	strftime(res, len, "%Y/%m/d - %H:%M:%S", &tm);
+	strftime(res, len, "%Y/%m/d - %H:%M:%S", tm);
 }
 
 /**
@@ -107,12 +106,8 @@ Fcb* CreateFile(const char* fileName, char mode, char type)
 		result->Size = 0;
 		time(&result->TimeInfo.LastWrite);
 		result->TimeInfo.LastRead = -1;
-		// 空文件分配一个磁盘块
 		if (type == FT_R)
 		{
-			/*ARRAYFIRST(short, Fat, FAT_CNT_MAX, *_it == FAT_AVALIABLE, fatId);
-			result->Address = fatId;
-			Fat[fatId] = FAT_NULL;*/
 			// 文件只能是叶子节点
 			result->Sibling = FCB_NULL;
 			result->Child = FCB_NAN;
@@ -200,13 +195,13 @@ void GetAbsolutePath(char* path, int len, const Fcb* fcb)
  */
 LogicRecord* GetEmptyDiskBlock()
 {
-	LogicRecord* record = NULL;
 	ARRAYFIRST(short, Fat, FAT_CNT_MAX, *_it == FAT_AVALIABLE, index);
 	if (index == -1)
 	{
 		return NULL;
 	}
-	record = malloc(sizeof(LogicRecord));
+	Fat[index] = FAT_NULL;
+	LogicRecord* record = malloc(sizeof(LogicRecord));
 	record->Data = &Vhd[index * DISK_BLOCK_SIZE];
 	record->BlockIndex = index;
 	return record;
@@ -234,7 +229,7 @@ void WriteString(Fcb* fcb, const char* content)
 		rec = GetEmptyDiskBlock();
 		TRYCATCH(rec->Data == NULL, "Disk space is not enough");
 
-		memcpy(rec->Data, content + it * DISK_BLOCK_SIZE, size);
+		memcpy(rec->Data, content + (it - 20) * DISK_BLOCK_SIZE, size);
 		Fat[it] = rec->BlockIndex;
 		it = rec->BlockIndex;
 	}
@@ -249,15 +244,53 @@ void WriteString(Fcb* fcb, const char* content)
  */
 char* ReadString(const Fcb* fcb)
 {
-	char* result = malloc(sizeof(char)*fcb->Size);
+	char* result = malloc(sizeof(char)*fcb->Size + 1);
 	short it = fcb->Address;
 	int blockCnt = 0;
 	while (it != FAT_NULL)
 	{
 		int size = min(fcb->Size - blockCnt * DISK_BLOCK_SIZE, DISK_BLOCK_SIZE) * sizeof(char);
-		int index = Fat[it];
-		memcpy(result + blockCnt*DISK_BLOCK_SIZE, Vhd, size);
+		memcpy(result + blockCnt*DISK_BLOCK_SIZE, Vhd + it*DISK_BLOCK_SIZE, size);
+		it = Fat[it];
+		blockCnt++;
 	}
+	result[fcb->Size] = 0;
 	return result;
 }
 
+/**
+ * \brief 删除指定文件
+ * \param fcb 文件控制块
+ */
+void DeleteFile(Fcb* fcb)
+{
+	Fcb* parent = FileCategory + fcb->Parent;
+	int it = fcb->Address;
+	// 清除磁盘块上的内容
+	while (fcb->Size > 0 && it != FAT_NULL)
+	{
+		memset(Vhd + it * DISK_BLOCK_SIZE, 0, DISK_BLOCK_SIZE);
+		short tmp = Fat[it];
+		Fat[it] = FAT_AVALIABLE;
+		it = tmp;
+	}
+	// 清除文件目录记录项
+	it = parent->Child;
+	if (it == fcb->Id)
+	{
+		parent->Child = FCB_NULL;
+	}
+	else
+	{
+		while (it != FCB_NAN)
+		{
+			if (FileCategory[it].Sibling == fcb->Id)
+			{
+				FileCategory[it].Sibling = fcb->Sibling;
+				break;
+			}
+			it = FileCategory[it].Sibling;
+		}
+	}
+	fcb->Id = FCB_NAN;
+}

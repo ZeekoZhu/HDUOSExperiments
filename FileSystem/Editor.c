@@ -157,5 +157,6 @@ void InitEditor()
 	Register(&context, "w", &EditorWriteSig);
 	printf("\nPress 'ESC' to switch to COMMAND Mode.\n");
 	Exec(&context);
-	free(context.Entries);
+	CommandEntry* entries = context.Entries;
+	free(entries);
 }

@@ -95,7 +95,7 @@ void Sender()
 		scanf("%s", msg);
 
 		// 用户输入结束指令
-		if (strncmp(msg, "exit", 4) == 0)
+		if (strcmp(msg, "exit") == 0)
 		{
 			strcpy(msg, "end");
 			TrySend(msg, 2);
@@ -145,7 +145,7 @@ void Receiver()
 		{
 			sem_post(&Srec);
 		}
-		if (strncmp(msg, "end", 3) == 0)
+		if (strcmp(msg, "end") == 0)
 		{
 			break;
 		}

@@ -2,6 +2,7 @@
 #include "Category.h"
 #include "Command.h"
 #include "Editor.h"
+#include <io.h>
 
 #define FILEEXIST(cwd, file) \
 if(FindChild(cwd, file) == NULL)\
@@ -10,10 +11,27 @@ if(FindChild(cwd, file) == NULL)\
 	return;\
 }
 
+#define CHECKREGFILE(permission) \
+	if (fcb == NULL)\
+	{\
+		printf("No such file\n");\
+		return 0;\
+	}\
+	if (fcb->Type != FT_R)\
+	{\
+		printf("%s is not a regular file\n", input);\
+		return 0;\
+	}\
+	if ((fcb->Mode & permission) != permission)\
+	{\
+		printf("Permission denied\n");\
+		return 0;\
+	}
+
 void Init()
 {
 	memset(Vhd, 0, sizeof Vhd);
-	memset(Fat, -1, sizeof Fat);
+	memset(Fat, FAT_AVALIABLE, sizeof Fat);
 	// 前 20 块被占用
 	memset(Fat, FAT_NULL, sizeof(short) * 20);
 	ARRAYINIT(Fcb, FileCategory, FILE_CNT_MAX, _it->Id = -1;);
@@ -162,27 +180,11 @@ int MyCreate()
 
 int MyRm()
 {
-	char filename[40];
-	scanf("%s", filename);
-	Fcb* fcb = FindChild(cwd, filename);
-	if (fcb == NULL)
-	{
-		printf("No such file\n");
-		return;
-	}
-	if (fcb->Type != FT_R)
-	{
-		printf("%s is not a regular file\n", filename);
-		return;
-	}
-	if ((fcb->Mode & FM_W) != FM_W)
-	{
-		printf("Permission denied\n");
-		return;
-	}
-	Fcb* parent = &FileCategory[fcb->Parent];
-	parent->Child = fcb->Sibling;
-	fcb->Id = -1;
+	char input[40];
+	scanf("%s", input);
+	Fcb* fcb = FindChild(cwd, input);
+	CHECKREGFILE(FM_W);
+	DeleteFile(fcb);
 	return 0;
 }
 
@@ -211,22 +213,8 @@ int MyOpen()
 	char input[40];
 	scanf("%s", input);
 	Fcb* fcb = FindChild(cwd, input);
-	if (fcb == NULL)
-	{
-		printf("No such file\n");
-		return;
-	}
-	if (fcb->Type != FT_R)
-	{
-		printf("%s is not a regular file\n", input);
-		return;
-	}
-	if ((fcb->Mode & FM_W) != FM_W)
-	{
-		printf("Permission denied\n");
-		return;
-	}
-	printf("(O/o)verride or (A/a)ppend\n");
+	CHECKREGFILE(FM_W);
+	printf("(O/o)verride or (A/a)ppend: ");
 	scanf("%s", input);
 	switch (input[0])
 	{
@@ -236,9 +224,13 @@ int MyOpen()
 		break;
 	case 'A':
 	case 'a':
+		Content = ReadString(fcb);
+		EDContentLen = fcb->Size;
+		EDContentSize = fcb->Size * 2;
 		break;
 	default:
 		printf("Invalid option\n");
+		return;
 	}
 	InitEditor();
 	if (ED_WRITE == EditorStatus)
@@ -248,6 +240,22 @@ int MyOpen()
 	return 0;
 }
 
+
+int MyRead()
+{
+	char input[40];
+	scanf("%s", input);
+	Fcb* fcb = FindChild(cwd, input);
+	if (fcb->Size == 0)
+	{
+		return 0;
+	}
+	CHECKREGFILE(FM_R);
+	char* content = ReadString(fcb);
+	printf("%s\n----------EOF----------\n", content);
+	free(content);
+	return 0;
+}
 
 int OpenEditor()
 {
@@ -271,6 +279,37 @@ void CommandInit(CommandContext* entries)
 	Register(entries, "rm", &MyRm);
 	Register(entries, "vin", &OpenEditor);
 	Register(entries, "open", &MyOpen);
+	Register(entries, "cat", &MyRead);
+}
+
+FILE* fvhd = NULL;
+void LoadVhd()
+{
+
+	if (access("fs.vhd", 0) == -1)
+	{
+		Init();
+		fvhd = fopen("fs.vhd", "wb+");
+		fclose(fvhd);
+	}
+	else
+	{
+		fvhd = fopen("fs.vhd", "rb");
+		fread(Fat, sizeof(short), FAT_CNT_MAX, fvhd);
+		fread(FileCategory, sizeof(Fcb), FILE_CNT_MAX, fvhd);
+		fread(Vhd, sizeof(char), DISKSIZE, fvhd);
+		root = FileCategory;
+		fclose(fvhd);
+	}
+}
+
+void SaveVhd()
+{
+	fopen("fs.vhd", "wb+");
+	fwrite(Fat, sizeof(short), FAT_CNT_MAX, fvhd);
+	fwrite(FileCategory, sizeof(Fcb), FILE_CNT_MAX, fvhd);
+	fwrite(Vhd, sizeof(char), DISKSIZE, fvhd);
+	fclose(fvhd);
 }
 
 int main()
@@ -279,10 +318,11 @@ int main()
 	cmdContext.CommandCnt = 0;
 	cmdContext.Entries = malloc(sizeof(CommandEntry) * 20);
 	CommandInit(&cmdContext);
-	Init();
+	LoadVhd();
 	cwd = root;
 	Commander(&cmdContext, '$');
 	printf("hello from FileSystem!\n");
 	free(cmdContext.Entries);
+	SaveVhd();
 	return 0;
 }
