@@ -76,7 +76,7 @@ int MyMkdir()
 	if (FindChild(cwd, dirName) != NULL)
 	{
 		printf("File is already exist\n");
-		return;
+		return 0;
 	}
 	Fcb* fcb = CreateFile(dirName, FM_W | FM_R, FT_D);
 	fcb->Sibling = cwd->Child;
@@ -120,7 +120,7 @@ int MyCd()
 	if (next == NULL)
 	{
 		printf("Directory is not exist");
-		return;
+		return 0;
 	}
 	cwd = next;
 	strcpy(cwdPath, newCwd);
@@ -135,22 +135,22 @@ int MyRmDir()
 	if (fcb == NULL)
 	{
 		printf("No such directory\n");
-		return;
+		return 0;
 	}
 	if (fcb->Type != FT_D)
 	{
 		printf("%s is not a directory\n", dir);
-		return;
+		return 0;
 	}
 	if ((fcb->Mode & FM_W) != FM_W)
 	{
 		printf("Permission denied\n");
-		return;
+		return 0;
 	}
 	if (fcb->Child != FCB_NULL)
 	{
 		printf("Directory is not empty\n");
-		return;
+		return 0;
 	}
 	Fcb* parent = &FileCategory[fcb->Parent];
 	parent->Child = fcb->Sibling;
@@ -171,7 +171,7 @@ int MyCreate()
 	if (strchr(input, '/') != NULL)
 	{
 		printf("Invalid filename\n");
-		return;
+		return 0;
 	}
 	if (FindChild(cwd, input) != NULL)
 	{
@@ -203,12 +203,12 @@ int MyChmod()
 	if (fcb == NULL)
 	{
 		printf("No such file or directory\n");
-		return;
+		return 0;
 	}
 	if (mode < 0 || mode > 7)
 	{
 		printf("Invalid mode\n");
-		return;
+		return 0;
 	}
 	fcb->Mode = mode;
 	return 0;
@@ -236,7 +236,7 @@ int MyOpen()
 		break;
 	default:
 		printf("Invalid option\n");
-		return;
+		return 0;
 	}
 	InitEditor();
 	if (ED_WRITE == EditorStatus)
@@ -252,11 +252,11 @@ int MyRead()
 	char input[40];
 	scanf("%s", input);
 	Fcb* fcb = FindChild(cwd, input);
+	CHECKREGFILE(FM_R);
 	if (fcb->Size == 0)
 	{
 		return 0;
 	}
-	CHECKREGFILE(FM_R);
 	char* content = ReadString(fcb);
 	printf("%s\n----------EOF----------\n", content);
 	free(content);
